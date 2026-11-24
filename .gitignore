@@ -1,0 +1,5 @@
+# your own play data stays local
+data/
+__pycache__/
+*.pyc
+.DS_Store

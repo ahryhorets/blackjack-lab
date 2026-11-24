@@ -1,0 +1,340 @@
+{
+ "seed": 11,
+ "quick": false,
+ "generated": "2026-11-24 23:44",
+ "styles": {
+  "basic": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 200000,
+   "net": -3815.0,
+   "wagered": 2266090.0,
+   "edge": -0.001684,
+   "ci": 0.004418,
+   "sd_units": 1.142276,
+   "max_drawdown": 7440.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "counter_flat": {
+   "play": "counter",
+   "bet": "flat",
+   "rounds": 200000,
+   "net": -2205.0,
+   "wagered": 2277805.0,
+   "edge": -0.000968,
+   "ci": 0.004406,
+   "sd_units": 1.144955,
+   "max_drawdown": 7110.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "counter_spread": {
+   "play": "counter",
+   "bet": "count",
+   "rounds": 200000,
+   "net": 38955.0,
+   "wagered": 4203370.0,
+   "edge": 0.009268,
+   "ci": 0.006822,
+   "sd_units": 3.271288,
+   "max_drawdown": 9155.0,
+   "max_bet": 120,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "mimic": {
+   "play": "mimic",
+   "bet": "flat",
+   "rounds": 200000,
+   "net": -114850.0,
+   "wagered": 2000000.0,
+   "edge": -0.057425,
+   "ci": 0.004284,
+   "sd_units": 0.977438,
+   "max_drawdown": 114930.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "never_bust": {
+   "play": "never_bust",
+   "bet": "flat",
+   "rounds": 200000,
+   "net": -125595.0,
+   "wagered": 2000000.0,
+   "edge": -0.062798,
+   "ci": 0.004354,
+   "sd_units": 0.993345,
+   "max_drawdown": 125670.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "always_hit": {
+   "play": "always_hit",
+   "bet": "flat",
+   "rounds": 200000,
+   "net": -1291015.0,
+   "wagered": 2000000.0,
+   "edge": -0.645508,
+   "ci": 0.003475,
+   "sd_units": 0.792871,
+   "max_drawdown": 1291015.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  }
+ },
+ "rules": {
+  "standard (3:2, S17, surrender, 6 decks)": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 500000,
+   "net": -14495.0,
+   "wagered": 5662120.0,
+   "edge": -0.00256,
+   "ci": 0.002793,
+   "sd_units": 1.141061,
+   "max_drawdown": 18000.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "6:5 blackjack": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 500000,
+   "net": -82421.0,
+   "wagered": 5662120.0,
+   "edge": -0.014557,
+   "ci": 0.002753,
+   "sd_units": 1.124756,
+   "max_drawdown": 84134.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "dealer hits soft 17": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 500000,
+   "net": -26500.0,
+   "wagered": 5659630.0,
+   "edge": -0.004682,
+   "ci": 0.002794,
+   "sd_units": 1.141025,
+   "max_drawdown": 27915.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "no surrender": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 500000,
+   "net": -14960.0,
+   "wagered": 5662540.0,
+   "edge": -0.002642,
+   "ci": 0.002826,
+   "sd_units": 1.154829,
+   "max_drawdown": 17125.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  },
+  "8 decks": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 500000,
+   "net": -27975.0,
+   "wagered": 5658590.0,
+   "edge": -0.004944,
+   "ci": 0.002794,
+   "sd_units": 1.140771,
+   "max_drawdown": 32060.0,
+   "max_bet": 10,
+   "final_balance": null,
+   "start": Infinity,
+   "ruined_at": null
+  }
+ },
+ "insurance": {
+  "never": {
+   "net": -3815.0,
+   "wagered": 2266090.0,
+   "edge": -0.0016835165417084053,
+   "insurance_net": 0.0,
+   "insurance_staked": 0.0,
+   "insurance_return": 0
+  },
+  "always": {
+   "net": -9250.0,
+   "wagered": 2342805.0,
+   "edge": -0.0039482586045360155,
+   "insurance_net": -5435.0,
+   "insurance_staked": 76715.0,
+   "insurance_return": -0.07084664016163723
+  }
+ },
+ "stop_win": {
+  "sessions": 20000,
+  "win_stop": 50,
+  "loss_stop": 200,
+  "max_rounds": 300,
+  "share_winning": 0.7598,
+  "avg_win": 53.590747565148725,
+  "avg_loss": -185.5483601420514,
+  "avg_result": -3.69275,
+  "total_result": -73855.0,
+  "avg_rounds": 80.80825,
+  "edge_est": -0.004044042970838127
+ },
+ "systems": {
+  "flat": {
+   "play": "basic",
+   "bet": "flat",
+   "rounds": 121690,
+   "net": -1995.0,
+   "wagered": 1379900.0,
+   "edge": -0.001446,
+   "ci": 0.005667,
+   "sd_units": 1.143726,
+   "max_drawdown": 3905.0,
+   "max_bet": 10,
+   "final_balance": 5.0,
+   "start": 2000,
+   "ruined_at": 121690
+  },
+  "martingale": {
+   "play": "basic",
+   "bet": "martingale",
+   "rounds": 425,
+   "net": -2000.0,
+   "wagered": 18405.0,
+   "edge": -0.108666,
+   "ci": 0.227976,
+   "sd_units": 10.384251,
+   "max_drawdown": 2940.0,
+   "max_bet": 1000,
+   "final_balance": 0.0,
+   "start": 2000,
+   "ruined_at": 425
+  },
+  "count spread": {
+   "play": "counter",
+   "bet": "count",
+   "rounds": 200000,
+   "net": 38955.0,
+   "wagered": 4203370.0,
+   "edge": 0.009268,
+   "ci": 0.006822,
+   "sd_units": 3.271288,
+   "max_drawdown": 9155.0,
+   "max_bet": 120,
+   "final_balance": 40955.0,
+   "start": 2000,
+   "ruined_at": null
+  }
+ },
+ "bankroll": [
+  {
+   "play": "basic",
+   "bet": "flat",
+   "unit": 25,
+   "runs": 20,
+   "rounds": 32000,
+   "median": 4768.75,
+   "mean": 5580.9375,
+   "worst": 0.0,
+   "best": 14475.0,
+   "share_down": 0.75,
+   "ruined": 4
+  },
+  {
+   "play": "counter",
+   "bet": "count",
+   "unit": 10,
+   "runs": 20,
+   "rounds": 32000,
+   "median": 13937.5,
+   "mean": 11718.0,
+   "worst": 0.0,
+   "best": 20755.0,
+   "share_down": 0.35,
+   "ruined": 2
+  },
+  {
+   "play": "counter",
+   "bet": "count",
+   "unit": 25,
+   "runs": 20,
+   "rounds": 32000,
+   "median": 16693.75,
+   "mean": 14998.125,
+   "worst": 0.0,
+   "best": 36887.5,
+   "share_down": 0.4,
+   "ruined": 8
+  },
+  {
+   "play": "counter",
+   "bet": "count",
+   "unit": 50,
+   "runs": 20,
+   "rounds": 32000,
+   "median": 0.0,
+   "mean": 13387.5,
+   "worst": 0.0,
+   "best": 63775.0,
+   "share_down": 0.65,
+   "ruined": 13
+  }
+ ],
+ "long_run": {
+  "avg_bet": 21.01685,
+  "mu_per_round": 0.19478416580000002,
+  "sd_per_round": 32.71288,
+  "n0": 28205.2700093408,
+  "table": [
+   {
+    "rounds": 1000,
+    "p_ahead": 0.5746766317714526,
+    "expected": 194.7841658
+   },
+   {
+    "rounds": 10000,
+    "p_ahead": 0.724223865757534,
+    "expected": 1947.8416580000003
+   },
+   {
+    "rounds": 28000,
+    "p_ahead": 0.8404610329705298,
+    "expected": 5453.9566424
+   },
+   {
+    "rounds": 76000,
+    "p_ahead": 0.9496534715260931,
+    "expected": 14803.596600800001
+   },
+   {
+    "rounds": 112000,
+    "p_ahead": 0.9768533389133104,
+    "expected": 21815.8265696
+   }
+  ]
+ },
+ "seconds": 577
+}
