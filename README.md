@@ -131,6 +131,12 @@ median 632 vs 659 hands until broke. Counting + bet sizing at
 2M hands each: +0.68% vs +0.64%. The generator doesn't drive the results; the check did
 show that the earlier +0.93% counting edge (one 200k run) was a lucky sample. Credit: a reader's question.
 
+**The catch:** the published numbers use a *seeded* Mersenne Twister on purpose, so anyone can rerun the lab and get
+exactly the same numbers. The price is that it isn't real-life randomness: it's a fixed formula, and knowing the seed
+means knowing every card. Real casinos shuffle physically, and online casinos must use certified unpredictable generators.
+This lab trades real unpredictability for repeatability; the SystemRandom rerun is the evidence that the trade doesn't
+change the results.
+
 ---
 
 ## How it works

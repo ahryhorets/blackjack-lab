@@ -350,6 +350,11 @@ generators deliver that at this scale. SystemRandom was about 1.2× slower. The 
 counting's 200k-hand edge (+0.93%) moved to +0.14% under the other generator, still "same" statistically, because that strategy
 is very swingy. At 2 million hands per generator both agree on about <b>{pct(CNT_EDGE)}</b>, which is now the headline.
 <b>Lesson: a question about the method is worth more than agreement with the result.</b></p>
+<div class="note warn"><b>The catch, stated plainly.</b> The published numbers use a <b>seeded</b> Mersenne Twister on purpose:
+the same seed gives the same shuffles, so anyone can rerun the lab and get exactly our numbers. The price is that it isn't
+real-life randomness: it's a fixed formula, and anyone who knew the seed could predict every card. Real casinos shuffle by
+hand or machine, and online casinos must use certified, unpredictable generators for exactly that reason. This lab trades
+real unpredictability for repeatability, and the SystemRandom rerun above is the evidence that the trade doesn't change the results.</div>
 <p>Rerun: <code>python3 tools/experiments.py --system-rng</code> then <code>python3 tools/rng_check.py</code>.</p>
 
 <h2>Part 5 · How this was built</h2>
@@ -497,6 +502,12 @@ Every experiment rerun with `random.SystemRandom` (OS entropy) instead of the se
 median {RC["martingale"]["MT"]["median"]:,.0f} vs {RC["martingale"]["SR"]["median"]:,.0f} hands until broke. Counting + bet sizing at
 2M hands each: {C2[0]["edge"] * 100:+.2f}% vs {C2[1]["edge"] * 100:+.2f}%. The generator doesn't drive the results; the check did
 show that the earlier +0.93% counting edge (one 200k run) was a lucky sample. Credit: a reader's question.
+
+**The catch:** the published numbers use a *seeded* Mersenne Twister on purpose, so anyone can rerun the lab and get
+exactly the same numbers. The price is that it isn't real-life randomness: it's a fixed formula, and knowing the seed
+means knowing every card. Real casinos shuffle physically, and online casinos must use certified unpredictable generators.
+This lab trades real unpredictability for repeatability; the SystemRandom rerun is the evidence that the trade doesn't
+change the results.
 
 ---
 
