@@ -77,10 +77,16 @@ class Bot:
 
 def simulate(hands: int = 100_000, play: str = "basic", bet: str = "flat",
              unit: float = 10, bankroll: float | None = None,
-             rules: RulesConfig | None = None, seed: int | None = None) -> dict:
-    """Play `hands` rounds. bankroll=None means unlimited money."""
+             rules: RulesConfig | None = None, seed: int | None = None,
+             rng: random.Random | None = None) -> dict:
+    """Play `hands` rounds. bankroll=None means unlimited money.
+
+    `rng` overrides `seed` entirely when given (e.g. pass
+    `random.SystemRandom()` to shuffle from OS entropy instead of the
+    default Mersenne Twister PRNG); see tools/rng_check.py.
+    """
     rules = rules or RulesConfig()
-    shoe = Shoe(rules.decks, rules.penetration, random.Random(seed))
+    shoe = Shoe(rules.decks, rules.penetration, rng or random.Random(seed))
     table = Table(rules, shoe)
     bot = Bot(play)
     system = BET_SYSTEMS[bet]

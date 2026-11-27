@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import html
 import json
+import statistics
 import math
 import os
 import sys
@@ -54,6 +55,10 @@ def cnt(*rem):
     return tuple(c)
 
 
+
+def _fv(r):
+    return (f"{r['mt'] * 100:+.2f}%", f"{r['sr'] * 100:+.2f}%") if r["fmt"] == "pct" else (f"{r['mt']:,.2f}", f"{r['sr']:,.2f}")
+
 # ------------------------------------------------------------------ numbers
 S = R["styles"]
 basic = S["basic"]
@@ -78,6 +83,22 @@ sw = R["stop_win"]
 sysm = R["systems"]
 bk = R["bankroll"]
 lr = R["long_run"]
+
+# Counting + bet spread: the 200k-hand number in results.json was a lucky sample
+# (+0.93%). The headline uses 2M hands under EACH generator (tools/rng_check.py,
+# docs/counter_2m_*.json): pooled 4M hands.
+C2 = [json.load(open(os.path.join(ROOT, "docs", f"counter_2m_{m}.json"))) for m in ("MT", "SR")]
+CNT_EDGE = sum(c["net"] for c in C2) / sum(c["wagered"] for c in C2)
+CNT_CI = 1.96 * math.sqrt(sum((c["ci"] / 1.96 * c["wagered"]) ** 2 for c in C2)) / sum(c["wagered"] for c in C2)
+CNT_HANDS = sum(c["rounds"] for c in C2)
+_avg_bet = sum(c["wagered"] for c in C2) / CNT_HANDS
+_mu = CNT_EDGE * _avg_bet
+_sd = statistics.mean(c["sd_units"] for c in C2) * 10
+lr = {"avg_bet": _avg_bet, "mu_per_round": _mu, "sd_per_round": _sd, "n0": (_sd / _mu) ** 2,
+      "table": [{"rounds": n, "expected": _mu * n,
+                 "p_ahead": 0.5 * (1 + math.erf(_mu * math.sqrt(n) / _sd / math.sqrt(2)))}
+                for n in (1000, 10000, 50000, 100000, 200000)]}
+RC = json.load(open(os.path.join(ROOT, "docs", "rng_check.json")))
 
 c_a = cnt("T", "T", "A")
 ev20 = stand_ev(20, dealer_distribution("A", c_a, RulesConfig()))
@@ -170,7 +191,7 @@ style_rows = [
     ["Always hit until 21 or bust", pct(S["always_hit"]["edge"])],
     ["Basic strategy chart", pct(basic["edge"])],
     ["Counting, flat bets", pct(S["counter_flat"]["edge"])],
-    ["Counting + bet spread 1–12 units", pct(S["counter_spread"]["edge"])],
+    ["Counting + bet spread 1–12 units", f'{pct(CNT_EDGE)} (±{CNT_CI * 100:.2f}, {CNT_HANDS / 1e6:.0f}M hands)'],
 ]
 
 doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -191,7 +212,7 @@ wins, and what an informed decision is actually worth, measured, not felt.</p>
 <div class="kpi"><div class="kl">Sessions that “won”</div><div class="kv">{sw["share_winning"]:.0%}</div></div>
 <div class="kpi"><div class="kl">…average session</div><div class="kv">{sw["avg_result"]:+.1f} chips</div></div>
 <div class="kpi"><div class="kl">Martingale, 2,000 bankroll</div><div class="kv">broke in {sysm["martingale"]["ruined_at"]:,} hands</div></div>
-<div class="kpi"><div class="kl">Counting + bet sizing</div><div class="kv">{pct(S["counter_spread"]["edge"])}</div></div>
+<div class="kpi"><div class="kl">Counting + bet sizing</div><div class="kv">{pct(CNT_EDGE)}</div></div>
 </div>
 
 <div class="note warn"><b>Disclaimer.</b> Education only. No real money, not gambling advice, not financial advice.
@@ -209,7 +230,7 @@ only exists to win some of it back, and only if you use them at the right moment
 <h3>2. Bad habits are where the real money is</h3>
 {analyze.bar_chart(["dealer copy", "never bust", "basic", "count flat", "count + bets"],
                    [S["mimic"]["edge"] * 100, S["never_bust"]["edge"] * 100, basic["edge"] * 100,
-                    S["counter_flat"]["edge"] * 100, S["counter_spread"]["edge"] * 100])}
+                    S["counter_flat"]["edge"] * 100, CNT_EDGE * 100])}
 {table(["how you play", "edge (200,000 hands each)"], style_rows, nums={1})}
 <p>"Never bust" sounds careful. It loses about <b>{S["never_bust"]["edge"] / basic["edge"]:.0f}× more</b> than the chart, because standing on 12–16 against a 7–A loses
 more than half the time. The casino doesn't need to cheat: intuition does the work.</p>
@@ -272,7 +293,9 @@ EV = average result in bets, if you made this choice forever.</p>
 <p>Cards that have been dealt don't come back until the shuffle, so the shoe has memory. Hi-Lo counting: 2–6 = +1, 7–9 = 0,
 tens and Aces = −1; divide by decks left to get the true count. Rich shoe → bet more.</p>
 <p>Counting with a flat bet barely helps ({pct(S["counter_flat"]["edge"])}). Betting 1 unit in bad shoes and up to 12 units in good ones:
-<b>{pct(S["counter_spread"]["edge"])}</b>. But that edge is thin and slow:</p>
+<b>{pct(CNT_EDGE)}</b> (95% range {pct(CNT_EDGE - CNT_CI)} to {pct(CNT_EDGE + CNT_CI)}, {CNT_HANDS / 1e6:.0f} million hands).
+An earlier version of this page said +0.93%: that was one 200,000-hand run, and the strategy swings so much that 200k hands
+can't pin it down. A reader's question made us rerun it at 20× the size (see Part 4). The edge is thin and slow:</p>
 {table(["hands played", "≈ hours", "chance you're ahead", "expected profit (10-unit)"],
        [[f'{t["rounds"]:,}', f'{t["rounds"] / 80:,.0f}', f'{t["p_ahead"]:.0%}', money(t["expected"], True)] for t in lr["table"]],
        nums={0, 1, 2, 3})}
@@ -310,7 +333,26 @@ python3 analyze.py                    # deep analysis of your own hands</pre>
 <li>Open an issue with what we should test next</li></ul></div>
 </div>
 
-<h2>Part 4 · How this was built</h2>
+<h2>Part 4 · Does the random generator matter?</h2>
+<p>A reader asked a sharp question: every number here comes from Python's default generator, the <b>Mersenne Twister</b>
+(<code>random.Random</code>): fast and repeatable, but not cryptographically secure. Would the results survive real
+<b>OS-level randomness</b> (<code>random.SystemRandom</code>, i.e. <code>os.urandom</code>)?</p>
+<p>So the <b>entire</b> experiment suite was rerun with SystemRandom, same sizes, and every published number compared with
+a z-score (difference ÷ combined standard error). |z| &lt; 2 is normal noise; with {len(RC["rows"])} comparisons, about
+{len(RC["rows"]) * 0.05:.0f} would cross 2 by pure chance even with identical generators.</p>
+{table(["experiment", "result", "Mersenne Twister", "SystemRandom", "z", "verdict"],
+       [[E(r["group"]), E(r["name"]), *_fv(r), f'{r["z"]:+.2f}', r["verdict"]] for r in RC["rows"]], nums={2, 3, 4})}
+<div class="math">{len(RC["rows"])} comparisons: {sum(r["verdict"] == "same" for r in RC["rows"])} same, {sum(r["verdict"] == "borderline" for r in RC["rows"])} borderline, {sum(r["verdict"] == "DIFFERENT" for r in RC["rows"])} different.
+Martingale, {RC["reps"]} runs each: median {RC["martingale"]["MT"]["median"]:,.0f} vs {RC["martingale"]["SR"]["median"]:,.0f} hands until broke.
+Counting + bet sizing, 2M hands each: {C2[0]["edge"] * 100:+.2f}% vs {C2[1]["edge"] * 100:+.2f}% (±{C2[0]["ci"] * 100:.2f}).</div>
+<p><b>Verdict:</b> the generator doesn't move any result. A shuffled shoe only needs each order to be equally likely, and both
+generators deliver that at this scale. SystemRandom was about 1.2× slower. The check also exposed a weaker claim of our own:
+counting's 200k-hand edge (+0.93%) moved to +0.14% under the other generator, still "same" statistically, because that strategy
+is very swingy. At 2 million hands per generator both agree on about <b>{pct(CNT_EDGE)}</b>, which is now the headline.
+<b>Lesson: a question about the method is worth more than agreement with the result.</b></p>
+<p>Rerun: <code>python3 tools/experiments.py --system-rng</code> then <code>python3 tools/rng_check.py</code>.</p>
+
+<h2>Part 5 · How this was built</h2>
 <p>Built with AI (Claude) and directed, tested and studied by the author. It started as a side project inspired by a
 uni Python assignment, and is completely separate from it. Everything is checked rather than trusted: 19 unit tests,
 results compared against published blackjack tables, a 3,000-hand random-input fuzz run, and every experiment is
@@ -380,6 +422,8 @@ Python 3.10+. Nothing to install.
 | `python3 analyze.py --file examples/sample_session.jsonl` | Same report on the example session |
 | `python3 tests.py` | 19 tests |
 | `python3 tools/experiments.py` | Rerun every number on the findings page (~10 min, seeded) |
+| `python3 tools/experiments.py --system-rng` | Same suite with OS randomness (`random.SystemRandom`) instead of Mersenne Twister |
+| `python3 tools/rng_check.py` | Compare both runs: z-score for every published number |
 
 **In the game:** `h` hit, `s` stand, `d` double, `p` split, `r` surrender, `?` what the chart/counter say.
 At the bet prompt: `k` Kelly bet suggestion, `m` table menu (panel on/off, **x-ray mode** shows the next cards, save).
@@ -425,7 +469,9 @@ Martingale went broke after **{sysm["martingale"]["ruined_at"]:,} hands**. Flat 
 
 ### Counting + bet spread
 
-Hi-Lo count, bet 1 unit below true count +2, then 2 units per true count up to 12: **{S["counter_spread"]["edge"] * 100:+.2f}%**.
+Hi-Lo count, bet 1 unit below true count +2, then 2 units per true count up to 12: **{CNT_EDGE * 100:+.2f}%**
+(95% range {(CNT_EDGE - CNT_CI) * 100:+.2f}% to {(CNT_EDGE + CNT_CI) * 100:+.2f}%, {CNT_HANDS / 1e6:.0f} million hands under two random generators).
+An earlier version said +0.93%: one 200,000-hand run that happened to be lucky; this strategy is too swingy for 200k hands.
 Real, but slow:
 
 | Hands | ≈ hours | Chance you're ahead | Expected (10-unit) |
@@ -443,6 +489,14 @@ Real, but slow:
 {N} hands by the author: result **{net:+,.0f}**, worth on average **{exp_:+,.0f}** given the cards and decisions,
 so **{net - exp_:+,.0f} was luck** ({z:+.1f}σ). {best_ok}/{len(decs)} decisions matched the best EV.
 [Full example report]({PAGES}sample_analysis.html).
+
+### Does the random generator matter?
+
+Every experiment rerun with `random.SystemRandom` (OS entropy) instead of the seeded Mersenne Twister, same sizes:
+**{len(RC["rows"])} of {len(RC["rows"])} results agree within normal noise** (|z| < 2). Martingale over {RC["reps"]} runs each:
+median {RC["martingale"]["MT"]["median"]:,.0f} vs {RC["martingale"]["SR"]["median"]:,.0f} hands until broke. Counting + bet sizing at
+2M hands each: {C2[0]["edge"] * 100:+.2f}% vs {C2[1]["edge"] * 100:+.2f}%. The generator doesn't drive the results; the check did
+show that the earlier +0.93% counting edge (one 200k run) was a lucky sample. Credit: a reader's question.
 
 ---
 

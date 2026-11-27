@@ -39,6 +39,8 @@ Python 3.10+. Nothing to install.
 | `python3 analyze.py --file examples/sample_session.jsonl` | Same report on the example session |
 | `python3 tests.py` | 19 tests |
 | `python3 tools/experiments.py` | Rerun every number on the findings page (~10 min, seeded) |
+| `python3 tools/experiments.py --system-rng` | Same suite with OS randomness (`random.SystemRandom`) instead of Mersenne Twister |
+| `python3 tools/rng_check.py` | Compare both runs: z-score for every published number |
 
 **In the game:** `h` hit, `s` stand, `d` double, `p` split, `r` surrender, `?` what the chart/counter say.
 At the bet prompt: `k` Kelly bet suggestion, `m` table menu (panel on/off, **x-ray mode** shows the next cards, save).
@@ -59,7 +61,7 @@ All numbers are from seeded simulations in `docs/results.json`.
 | Always hit until 21 or bust | -64.55% |
 | Basic strategy chart | -0.17% |
 | Counting, flat bets | -0.10% |
-| Counting + bet spread 1–12 units | +0.93% |
+| Counting + bet spread 1–12 units | +0.66% (±0.15, 4M hands) |
 
 "Never bust" sounds careful and loses ~37× more than the chart.
 
@@ -93,16 +95,18 @@ Martingale went broke after **425 hands**. Flat betting lasted 121,690.
 
 ### Counting + bet spread
 
-Hi-Lo count, bet 1 unit below true count +2, then 2 units per true count up to 12: **+0.93%**.
+Hi-Lo count, bet 1 unit below true count +2, then 2 units per true count up to 12: **+0.66%**
+(95% range +0.51% to +0.82%, 4 million hands under two random generators).
+An earlier version said +0.93%: one 200,000-hand run that happened to be lucky; this strategy is too swingy for 200k hands.
 Real, but slow:
 
 | Hands | ≈ hours | Chance you're ahead | Expected (10-unit) |
 |---|---|---|---|
-| 1,000 | 12 | 57% | +195 |
-| 10,000 | 125 | 72% | +1,948 |
-| 28,000 | 350 | 84% | +5,454 |
-| 76,000 | 950 | 95% | +14,804 |
-| 112,000 | 1,400 | 98% | +21,816 |
+| 1,000 | 12 | 55% | +140 |
+| 10,000 | 125 | 66% | +1,396 |
+| 50,000 | 625 | 83% | +6,978 |
+| 100,000 | 1,250 | 91% | +13,955 |
+| 200,000 | 2,500 | 97% | +27,911 |
 
 10,000 bankroll over ~400 hours (20 runs each):
 
@@ -118,6 +122,14 @@ Real, but slow:
 95 hands by the author: result **+2,950**, worth on average **+389** given the cards and decisions,
 so **+2,561 was luck** (+1.3σ). 120/124 decisions matched the best EV.
 [Full example report](https://ahryhorets.github.io/blackjack-lab/sample_analysis.html).
+
+### Does the random generator matter?
+
+Every experiment rerun with `random.SystemRandom` (OS entropy) instead of the seeded Mersenne Twister, same sizes:
+**23 of 23 results agree within normal noise** (|z| < 2). Martingale over 200 runs each:
+median 632 vs 659 hands until broke. Counting + bet sizing at
+2M hands each: +0.68% vs +0.64%. The generator doesn't drive the results; the check did
+show that the earlier +0.93% counting edge (one 200k run) was a lucky sample. Credit: a reader's question.
 
 ---
 

@@ -1,0 +1,17 @@
+{
+ "play": "counter",
+ "bet": "count",
+ "rounds": 2000000,
+ "net": 287135.0,
+ "wagered": 42180960.0,
+ "edge": 0.006807218233060603,
+ "ci": 0.0021644601749390203,
+ "sd_units": 3.293783046700167,
+ "max_drawdown": 17850.0,
+ "max_bet": 120,
+ "final_balance": null,
+ "start": Infinity,
+ "ruined_at": null,
+ "mode": "MT",
+ "secs": 177
+}

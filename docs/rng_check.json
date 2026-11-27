@@ -1,0 +1,232 @@
+{
+ "rows": [
+  {
+   "group": "play style",
+   "name": "basic",
+   "mt": -0.001684,
+   "sr": 0.001425,
+   "z": 0.9757368034872808,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "play style",
+   "name": "counter_flat",
+   "mt": -0.000968,
+   "sr": -0.000422,
+   "z": 0.17174702518261364,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "play style",
+   "name": "counter_spread",
+   "mt": 0.009268,
+   "sr": 0.001435,
+   "z": -1.585499017785443,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "play style",
+   "name": "mimic",
+   "mt": -0.057425,
+   "sr": -0.05707,
+   "z": 0.11488730138214609,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "play style",
+   "name": "never_bust",
+   "mt": -0.062798,
+   "sr": -0.064232,
+   "z": -0.4566687485312508,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "play style",
+   "name": "always_hit",
+   "mt": -0.645508,
+   "sr": -0.647065,
+   "z": -0.6219597045401816,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "rule tweak",
+   "name": "standard (3:2, S17, surrender, 6 decks)",
+   "mt": -0.00256,
+   "sr": -0.003387,
+   "z": -0.4101497078705602,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "rule tweak",
+   "name": "6:5 blackjack",
+   "mt": -0.014557,
+   "sr": -0.014954,
+   "z": -0.19982346813347976,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "rule tweak",
+   "name": "dealer hits soft 17",
+   "mt": -0.004682,
+   "sr": -0.004767,
+   "z": -0.042155658565047716,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "rule tweak",
+   "name": "no surrender",
+   "mt": -0.002642,
+   "sr": -0.001781,
+   "z": 0.42210295189371727,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "rule tweak",
+   "name": "8 decks",
+   "mt": -0.004944,
+   "sr": -0.002742,
+   "z": 1.092274981767589,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "insurance",
+   "name": "return on insurance bets",
+   "mt": -0.07084664016163723,
+   "sr": -0.04493118051879301,
+   "z": 1.6240157276311649,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "quit while ahead",
+   "name": "sessions that end up",
+   "mt": 0.7598,
+   "sr": 0.7619,
+   "z": 0.4923068689895611,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "quit while ahead",
+   "name": "average session (chips)",
+   "mt": -3.69275,
+   "sr": -2.8235,
+   "z": 0.8349240957502709,
+   "verdict": "same",
+   "fmt": "num"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "basic, flat, unit 25: runs ending below 10,000",
+   "mt": 0.75,
+   "sr": 0.75,
+   "z": 0.0,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "basic, flat, unit 25: runs that went broke",
+   "mt": 0.2,
+   "sr": 0.15,
+   "z": -0.41612518928823966,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 10: runs ending below 10,000",
+   "mt": 0.35,
+   "sr": 0.25,
+   "z": -0.690065559342354,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 10: runs that went broke",
+   "mt": 0.1,
+   "sr": 0.0,
+   "z": -1.4509525002200234,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 25: runs ending below 10,000",
+   "mt": 0.4,
+   "sr": 0.2,
+   "z": -1.3801311186847085,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 25: runs that went broke",
+   "mt": 0.4,
+   "sr": 0.15,
+   "z": -1.7705355794912778,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 50: runs ending below 10,000",
+   "mt": 0.65,
+   "sr": 0.65,
+   "z": 0.0,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "bankroll 10k",
+   "name": "counter + count bets, unit 50: runs that went broke",
+   "mt": 0.65,
+   "sr": 0.65,
+   "z": 0.0,
+   "verdict": "same",
+   "fmt": "pct"
+  },
+  {
+   "group": "martingale 2,000 (200 runs each)",
+   "name": "typical hands until broke (log scale)",
+   "mt": 6.631516155177876,
+   "sr": 6.8077471112402215,
+   "z": 0.8471874173043477,
+   "verdict": "same",
+   "fmt": "num"
+  }
+ ],
+ "martingale": {
+  "MT": {
+   "median": 632.0,
+   "q1": 230.25,
+   "q3": 2301.0,
+   "min": 8,
+   "max": 200000,
+   "share_broke": 0.99
+  },
+  "SR": {
+   "median": 659.0,
+   "q1": 228.75,
+   "q3": 2721.75,
+   "min": 13,
+   "max": 200000,
+   "share_broke": 0.97
+  }
+ },
+ "reps": 200,
+ "mt_generated": "2026-11-27 15:13",
+ "sr_generated": "2026-11-27 15:13"
+}

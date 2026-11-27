@@ -1,7 +1,8 @@
 {
  "seed": 11,
  "quick": false,
- "generated": "2026-11-24 23:44",
+ "rng": "MersenneTwister",
+ "generated": "2026-11-27 15:13",
  "styles": {
   "basic": {
    "play": "basic",
@@ -198,6 +199,7 @@
   "avg_win": 53.590747565148725,
   "avg_loss": -185.5483601420514,
   "avg_result": -3.69275,
+  "sd_result": 104.51033904827742,
   "total_result": -73855.0,
   "avg_rounds": 80.80825,
   "edge_est": -0.004044042970838127
@@ -336,5 +338,5 @@
    }
   ]
  },
- "seconds": 577
+ "seconds": 652
 }

@@ -36,11 +36,20 @@ from table import Table                       # noqa: E402
 
 QUICK = "--quick" in sys.argv
 K = 10 if QUICK else 1
+# --system-rng: shuffle every shoe with random.SystemRandom (OS entropy)
+# instead of the seeded Mersenne Twister. Same experiments, same sizes;
+# results go to docs/results_systemrandom.json (tools/rng_check.py compares).
+SYSTEM_RNG = "--system-rng" in sys.argv
+
+
+def make_rng(seed):
+    """The shoe's random generator: seeded Mersenne Twister, or OS entropy."""
+    return random.SystemRandom() if SYSTEM_RNG else random.Random(seed)
 SEED = 11
 
 
 def run(n, play="basic", bet="flat", **kw):
-    r = sim.simulate(n // K, play, bet, seed=kw.pop("seed", SEED), **kw)
+    r = sim.simulate(n // K, play, bet, rng=make_rng(kw.pop("seed", SEED)), **kw)
     return {k: (round(v, 6) if isinstance(v, float) else v) for k, v in r.items()}
 
 
@@ -54,7 +63,7 @@ def insurance_experiment(n):
     rules = RulesConfig()
     out = {}
     for name, bot in (("never", sim.Bot("basic")), ("always", Insurer("basic"))):
-        shoe = Shoe(rules.decks, rules.penetration, random.Random(SEED))
+        shoe = Shoe(rules.decks, rules.penetration, make_rng(SEED))
         t = Table(rules, shoe)
         ins_net = ins_staked = net = wag = 0.0
         for _ in range(n // K):
@@ -76,7 +85,7 @@ def stop_win_experiment(sessions, win_stop=50, loss_stop=200, max_rounds=300):
     bot = sim.Bot("basic")
     results, lengths = [], []
     for s in range(sessions // K):
-        shoe = Shoe(rules.decks, rules.penetration, random.Random(rng.random()))
+        shoe = Shoe(rules.decks, rules.penetration, make_rng(rng.random()))
         t = Table(rules, shoe)
         net, n = 0.0, 0
         while n < max_rounds and -loss_stop < net < win_stop:
@@ -93,6 +102,7 @@ def stop_win_experiment(sessions, win_stop=50, loss_stop=200, max_rounds=300):
             "avg_win": statistics.mean(wins) if wins else 0,
             "avg_loss": statistics.mean(losses) if losses else 0,
             "avg_result": statistics.mean(results),
+            "sd_result": statistics.stdev(results),
             "total_result": sum(results),
             "avg_rounds": statistics.mean(lengths),
             "edge_est": sum(results) / total_wag_est}
@@ -104,7 +114,7 @@ def bankroll_experiment(runs=20, rounds=32000):
                             ("counter", "count", 25), ("counter", "count", 50)):
         finals, ruined = [], 0
         for s in range(runs):
-            r = sim.simulate(rounds // K, play, bet, unit=unit, bankroll=10000, seed=100 + s)
+            r = sim.simulate(rounds // K, play, bet, unit=unit, bankroll=10000, rng=make_rng(100 + s))
             finals.append(r["final_balance"])
             ruined += r["ruined_at"] is not None
         out.append({"play": play, "bet": bet, "unit": unit, "runs": runs,
@@ -118,7 +128,8 @@ def bankroll_experiment(runs=20, rounds=32000):
 
 def main():
     t0 = time.time()
-    res = {"seed": SEED, "quick": QUICK, "generated": time.strftime("%Y-%m-%d %H:%M")}
+    res = {"seed": SEED, "quick": QUICK, "rng": "SystemRandom" if SYSTEM_RNG else "MersenneTwister",
+           "generated": time.strftime("%Y-%m-%d %H:%M")}
     print("A. play styles...")
     res["styles"] = {name: run(200_000, p, b) for name, p, b in (
         ("basic", "basic", "flat"), ("counter_flat", "counter", "flat"),
@@ -153,7 +164,7 @@ def main():
                        "table": [{"rounds": n, "p_ahead": 0.5 * (1 + math.erf(mu * math.sqrt(n) / sd / math.sqrt(2))),
                                   "expected": mu * n} for n in (1000, 10000, 28000, 76000, 112000)]}
     res["seconds"] = round(time.time() - t0)
-    out = os.path.join(ROOT, "docs", "results.json")
+    out = os.path.join(ROOT, "docs", "results_systemrandom.json" if SYSTEM_RNG else "results.json")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w") as f:
         json.dump(res, f, indent=1)
